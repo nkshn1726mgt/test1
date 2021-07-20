@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+
+	<!-- SelectMaintenanceInfo -->
+	<named-query name="MaintenanceInfoEntity.findAllOrderByMaintenanceId">
+		<query>
+			<![CDATA[
+				SELECT a FROM MaintenanceInfo a ORDER BY a.maintenanceId
+			]]>
+		</query>
+	</named-query>
+	<named-query name="MaintenanceInfoEntity.findByCalendarId">
+		<query>
+			<![CDATA[
+				SELECT a FROM MaintenanceInfo a
+				WHERE a.calendarId = :calendarId
+				ORDER BY a.maintenanceId
+			]]>
+		</query>
+	</named-query>
+
+	<!-- SelectMaintenanceTypeMst -->
+	<named-query name="MaintenanceTypeMstEntity.findAll">
+		<query>
+			<![CDATA[
+				SELECT a FROM MaintenanceTypeMst a ORDER BY a.order_no
+			]]>
+		</query>
+	</named-query>
+
+	<!-- MaintenanceEvent -->
+	<named-query name="EventLogEntity.deleteByGenerationDate">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogEntity c WHERE c.generationDate < :generationDate
+			]]>
+		</query>
+	</named-query>
+	<named-query name="EventLogOperationHistoryEntity.deleteByGenerationDate">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogOperationHistoryEntity c
+				WHERE EXISTS (
+					select 'X'
+					FROM EventLogEntity a
+					WHERE a.generationDate < :generationDate
+					AND   a.id.monitorId = c.monitorId
+					AND   a.id.monitorDetailId = c.monitorDetailId
+					AND   a.id.pluginId = c.pluginId
+					AND   a.id.outputDate = c.outputDate
+					AND   a.id.facilityId = c.facilityId
+				)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="EventLogEntity.deleteByGenerationDateConfigFlg">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogEntity c WHERE c.generationDate < :generationDate AND c.confirmFlg='1'
+			]]>
+		</query>
+	</named-query>
+	<named-query name="EventLogOperationHistoryEntity.deleteByGenerationDateConfigFlg">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogOperationHistoryEntity c
+				WHERE EXISTS (
+					select 'X'
+					FROM EventLogEntity a
+					WHERE a.generationDate < :generationDate
+					AND   a.confirmFlg='1'
+					AND   a.id.monitorId = c.monitorId
+					AND   a.id.monitorDetailId = c.monitorDetailId
+					AND   a.id.pluginId = c.pluginId
+					AND   a.id.outputDate = c.outputDate
+					AND   a.id.facilityId = c.facilityId
+				)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="EventLogEntity.deleteByGenerationDateAndOwnerRoleId">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogEntity c WHERE c.generationDate < :generationDate AND c.ownerRoleId = :ownerRoleId
+			]]>
+		</query>
+	</named-query>
+	<named-query name="EventLogOperationHistoryEntity.deleteByGenerationDateAndOwnerRoleId">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogOperationHistoryEntity c
+				WHERE EXISTS (
+					select 'X'
+					FROM EventLogEntity a
+					WHERE a.generationDate < :generationDate
+					AND   a.ownerRoleId = :ownerRoleId
+					AND   a.id.monitorId = c.monitorId
+					AND   a.id.monitorDetailId = c.monitorDetailId
+					AND   a.id.pluginId = c.pluginId
+					AND   a.id.outputDate = c.outputDate
+					AND   a.id.facilityId = c.facilityId
+				)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="EventLogEntity.deleteByGenerationDateConfigFlgAndOwnerRoleId">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogEntity c WHERE c.generationDate < :generationDate AND c.confirmFlg='1' AND c.ownerRoleId = :ownerRoleId
+			]]>
+		</query>
+	</named-query>
+	<named-query name="EventLogOperationHistoryEntity.deleteByGenerationDateConfigFlgAndOwnerRoleId">
+		<query>
+			<![CDATA[
+				DELETE FROM EventLogOperationHistoryEntity c
+				WHERE EXISTS (
+					select 'X'
+					FROM EventLogEntity a
+					WHERE a.generationDate < :generationDate
+					AND   a.confirmFlg='1'
+					AND   a.ownerRoleId = :ownerRoleId
+					AND   a.id.monitorId = c.monitorId
+					AND   a.id.monitorDetailId = c.monitorDetailId
+					AND   a.id.pluginId = c.pluginId
+					AND   a.id.outputDate = c.outputDate
+					AND   a.id.facilityId = c.facilityId
+				)
+			]]>
+		</query>
+	</named-query>
+	
+	<!-- HinemosProperty -->
+	<named-query name="HinemosPropertyEntity.findAll">
+		<query>
+			<![CDATA[
+				SELECT a FROM HinemosPropertyInfo a ORDER BY a.key
+			]]>
+		</query>
+	</named-query>
+	<named-query name="HinemosPropertyEntity.findByKey">
+		<query>
+			<![CDATA[
+				SELECT a FROM HinemosPropertyInfo a
+				WHERE a.key = :key
+				ORDER BY a.key
+			]]>
+		</query>
+	</named-query>
+	
+	<!-- MaintenanceCollectData -->
+	<named-query name="CollectData.deleteByDateTimeAndMonitorId">
+		<query>
+			<![CDATA[
+				DELETE FROM CollectData a WHERE a.id.time < :dateTime
+					AND a.id.collectorid IN (SELECT c.collectorid FROM CollectKeyInfo c WHERE c.id.monitorId = :monitorId)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="CollectData.deleteByDateTime">
+		<query>
+			<![CDATA[
+				DELETE FROM CollectData a WHERE a.id.time < :dateTime
+			]]>
+		</query>
+	</named-query>
+	<named-query name="CollectKeyInfo.getCollectorIdByMonitorId">
+		<query>
+			<![CDATA[
+				SELECT a.collectorid FROM CollectKeyInfo a WHERE a.id.monitorId IN :monitorIdList
+			]]>
+		</query>
+	</named-query>
+	<named-query name="CollectData.deleteByDateTimeAndCollectorId">
+		<query>
+			<![CDATA[
+				DELETE FROM CollectData a WHERE a.id.time < :dateTime AND a.id.collectorid = :collectorid
+			]]>
+		</query>
+	</named-query>
+	<named-query name="SummaryHour.deleteByDateTimeAndMonitorId">
+		<query>
+			<![CDATA[
+				DELETE FROM SummaryHour a WHERE a.id.time < :dateTime
+					AND a.id.collectorid IN (SELECT c.collectorid FROM CollectKeyInfo c WHERE c.id.monitorId = :monitorId)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="SummaryHour.deleteByDateTime">
+		<query>
+			<![CDATA[
+				DELETE FROM SummaryHour a WHERE a.id.time < :dateTime
+			]]>
+		</query>
+	</named-query>
+	<named-query name="SummaryDay.deleteByDateTimeAndMonitorId">
+		<query>
+			<![CDATA[
+				DELETE FROM SummaryDay a WHERE a.id.time < :dateTime
+					AND a.id.collectorid IN (SELECT c.collectorid FROM CollectKeyInfo c WHERE c.id.monitorId = :monitorId)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="SummaryDay.deleteByDateTime">
+		<query>
+			<![CDATA[
+				DELETE FROM SummaryDay a WHERE a.id.time < :dateTime
+			]]>
+		</query>
+	</named-query>
+	<named-query name="SummaryMonth.deleteByDateTimeAndMonitorId">
+		<query>
+			<![CDATA[
+				DELETE FROM SummaryMonth a WHERE a.id.time < :dateTime
+					AND a.id.collectorid IN (SELECT c.collectorid FROM CollectKeyInfo c WHERE c.id.monitorId = :monitorId)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="SummaryMonth.deleteByDateTime">
+		<query>
+			<![CDATA[
+				DELETE FROM SummaryMonth a WHERE a.id.time < :dateTime
+			]]>
+		</query>
+	</named-query>
+	<named-query name="CollectStringData.deleteByDateTimeAndMonitorId">
+		<query>
+			<![CDATA[
+				DELETE FROM CollectStringData a WHERE a.time < :dateTime
+					AND a.id.collectId IN (SELECT c.collectId FROM CollectStringKeyInfo c WHERE c.id.monitorId = :monitorId)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="CollectStringData.deleteByDateTime">
+		<query>
+			<![CDATA[
+				DELETE FROM CollectStringData a WHERE a.time < :dateTime
+			]]>
+		</query>
+	</named-query>
+	<named-query name="CollectBinaryData.deleteByDateTimeAndMonitorId">
+		<query>
+			<![CDATA[
+				DELETE FROM CollectBinaryData a WHERE a.time < :dateTime
+					AND a.id.collectId IN (SELECT c.collectId FROM CollectStringKeyInfo c WHERE c.id.monitorId = :monitorId)
+			]]>
+		</query>
+	</named-query>
+	<named-query name="CollectBinaryData.deleteByDateTime">
+		<query>
+			<![CDATA[
+				DELETE FROM CollectBinaryData a WHERE a.time < :dateTime
+			]]>
+		</query>
+	</named-query>
+</entity-mappings>

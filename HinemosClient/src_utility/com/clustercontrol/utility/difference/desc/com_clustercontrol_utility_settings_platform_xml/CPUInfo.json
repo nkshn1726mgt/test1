@@ -1,0 +1,72 @@
+{
+"annotations":[
+	{"type":"Element"}
+],
+"props":[
+	{
+	"propName":"facilityId",
+	"annotations":[
+
+	]},
+
+	{
+	"propName":"deviceIndex",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_deviceIndex"}
+	]},
+
+	{
+	"propName":"deviceType",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_deviceType"}
+	]},
+
+	{
+	"propName":"deviceName",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_deviceName"}
+	]},
+
+	{
+	"propName":"deviceDisplayName",
+	"annotations":[
+		{"type":"PrimaryKey"}
+	]},
+
+	{
+	"propName":"deviceSize",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_deviceSize"}
+	]},
+
+	{
+	"propName":"deviceSizeUnit",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_deviceSizeUnit"}
+	]},
+
+	{
+	"propName":"deviceDescription",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_deviceDescription"}
+	]},
+
+	{
+	"propName":"coreCount",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_coreCount"}
+	]},
+
+	{
+	"propName":"threadCount",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_threadCount"}
+	]},
+
+	{
+	"propName":"clockCount",
+	"annotations":[
+		{"type":"Column", "columnName":"CPUInfo_clockCount"}
+	]}
+]
+}
